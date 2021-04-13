@@ -37,6 +37,25 @@ public class UserService {
                 new UserNotFoundException("User by id "+ id+" was not found!"));
     }
 
+    public void updateNumDotazioniPlus(Long id) {
+        User userToUpdate = userRepository.findUserById(id).orElseThrow(() ->
+                new UserNotFoundException("User by id "+ id+" was not found!"));
+        int num = userToUpdate.getNumDotazioni();
+        num++;
+        userToUpdate.setNumDotazioni(num);
+        userRepository.save(userToUpdate);
+    }
+
+    public void updateNumDotazioniMinus(Long id) {
+        User userToUpdate = userRepository.findUserById(id).orElseThrow(() ->
+                new UserNotFoundException("User by id "+ id+" was not found!"));
+        
+        int num = userToUpdate.getNumDotazioni();
+        num--;
+        userToUpdate.setNumDotazioni(num);
+        userRepository.save(userToUpdate);
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteUserById(id);
     }

@@ -1,0 +1,74 @@
+<div class="movement-plugin">
+  <h5>
+    <button class="btn btn-danger btn-fab btn-round" (click)="onOpenMovementModal()">
+      <i class="nc-icon nc-share-66"></i> Assegna
+    </button>
+  </h5>
+
+  <!-- Add Movement Modal -->
+  <div class="modal fade" id="addMovementModal" tabindex="-1" role="dialog"
+    aria-labelledby="addMovementModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addMovementModalCenterTitle">Assegna dotazioni</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="createMovementForm" (ngSubmit)="onSubmit()">
+          <div class="modal-body">
+
+            <div class="form-group">
+              <label> Nome </label>
+              <ng-select formControlName="name" [(items)]="users"
+                [(ngModel)]="selectedUserId" bindLabel="name" bindValue="id" placeholder="Seleziona un utente...">
+
+                <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                  <span class="ng-value-label">
+                    {{item?.name}}  {{item?.surname}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </ng-template>
+
+                <ng-template ng-option-tmp let-item="item">
+                  {{item?.name}}  {{item?.surname}}
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+              <label> Dotazioni </label>
+              <!-- <select [formControlName]="i" class="form-control custom-select" data-live-search="true">
+                    <option *ngFor="let item of garments" [ngValue]="item" >{{item.name}} - {{item.size}}</option>
+                  </select> -->
+              <ng-select formControlName="garmentsList" [(items)]="garments" [multiple]="true" groupBy="name"
+                [(ngModel)]="selectedGarments" bindLabel="name" bindValue="id" placeholder="Seleziona le dotazioni...">
+
+                <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                  <span class="ng-value-label">
+                    {{item?.name}} - {{item?.size}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </ng-template>
+
+                <ng-template ng-option-tmp let-item="item">
+                  {{item?.name}} - {{item?.size}}
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <!-- <p>createMovementForm value: {{ createMovementForm.value | json}}</p> -->
+            <div class="modal-footer">
+              <button type="button" id="add-movement-form-close" class="btn btn-secondary"
+                data-dismiss="modal">Annulla</button>
+              <button type="submit" [disabled]="!createMovementForm.valid" class="btn btn-primary">Salva</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+</div>

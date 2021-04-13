@@ -1,5 +1,8 @@
 package com.pc.inventario.model;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +14,8 @@ public class User implements Serializable {
     private Long id;
     private String name;
     private String surname;
+    @Column(columnDefinition = "integer default 0")
+    private int numDotazioni;
 
     public User(String name, String surname) {
         this.name = name;
@@ -18,6 +23,14 @@ public class User implements Serializable {
     }
 
     public User() {
+    }
+
+    public int getNumDotazioni() {
+        return numDotazioni;
+    }
+
+    public void setNumDotazioni(int numDotazioni) {
+        this.numDotazioni = numDotazioni;
     }
 
     public String getName() {

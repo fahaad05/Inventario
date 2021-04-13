@@ -1,2 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+.movement-plugin {
+  position: fixed;
+  right: 0;
+  /* width: 100px; */
+  /* background: rgba(0, 0, 0, 0.3); */
+  z-index: 9999;
+  border-radius: 8px 0 0 8px;
+  bottom: 30px;
+}

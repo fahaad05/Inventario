@@ -14,6 +14,10 @@ import { AppRoutes } from './app.routing';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { UserListComponent } from './pages/user/list/user-list.component';
 import { HttpClientModule } from "@angular/common/http";
+import { MovementCreateComponent } from './shared/movement-create/movement-create.component';
+import { MovementModule } from "./shared/movement-create/movement.module";
+import { MovementGarmentComponent } from './pages/movement-garment/movement-garment.component';
+import { MovementUserComponent } from './pages/movement-user/movement-user.component';
 
 
 @NgModule({
@@ -31,6 +35,7 @@ import { HttpClientModule } from "@angular/common/http";
     ToastrModule.forRoot(),
     FooterModule,
     FixedPluginModule,
+    MovementModule,
     HttpClientModule
   ],
   providers: [],

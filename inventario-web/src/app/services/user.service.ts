@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User as User } from 'app/models/User';
 import { environment } from 'environments/environment';
 import { Observable, Subject } from 'rxjs';
-import { HttpClient } from "@angular/common/http"
+import { HttpClient, HttpErrorResponse } from "@angular/common/http"
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,27 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  public getUsers(): Observable<User[]> {
+  public getUsersHttp(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiServerUrl}/user/all`);
+  }
+
+  public getUsers(usersList: User[]): User[] {
+    this.getUsersHttp().subscribe(
+      (response: User[]) => {
+        usersList = response;
+        this.setNewUsers(response);
+        console.log(usersList);
+        return usersList;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message)
+      }
+    );
+    return null;
+  }
+
+  public getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.apiServerUrl}/user/find/id/${userId}`);
   }
 
   public addUser(user: User): Observable<User> {
@@ -33,4 +52,5 @@ export class UserService {
   setNewUsers(users: User[]) {
     this.usersSource.next( users );
   }
+
 }

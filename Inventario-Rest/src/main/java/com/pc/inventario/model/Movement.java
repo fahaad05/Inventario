@@ -13,12 +13,23 @@ public class Movement {
     private Long id;
     private Long userId;
     private Long garmentId;
-    private Date movementDate;
 
-    public Movement(Long userId, Long garmentId, Date movementDate) {
+    private MovementType movementType;
+
+    public Movement(Long userId, Long garmentId) {
         this.userId = userId;
         this.garmentId = garmentId;
-        this.movementDate = movementDate;
+    }
+
+    public Movement() {
+    }
+
+    public MovementType getMovementType() {
+        return movementType;
+    }
+
+    public void setMovementType(MovementType movementType) {
+        this.movementType = movementType;
     }
 
     public Long getId() {
@@ -45,11 +56,4 @@ public class Movement {
         this.garmentId = garmentId;
     }
 
-    public Date getMovementDate() {
-        return movementDate;
-    }
-
-    public void setMovementDate(Date movementDate) {
-        this.movementDate = movementDate;
-    }
 }

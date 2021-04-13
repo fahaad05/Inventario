@@ -1,151 +1,161 @@
-<div  class="row" id="main-container">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">
-          Lista Utenti
-          <button class="btn btn-primary btn-fab btn-icon btn-round" (click)="onOpenModal(null,'add')">
-            <i class="nc-icon nc-simple-add"></i>
-          </button>
-        </h4>
+<div id="user-list">
 
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table">
-            <thead class=" text-primary">
-              <th>
-                Nome
-              </th>
-              <th>
-                Cognome
-              </th>
-            </thead>
-            <tbody>
-              <tr *ngFor="let user of users">
-                <td>{{user?.name}}</td>
-                <td>{{user?.surname}}</td>
-                <td class="text-right">
-                  <!-- Edit User  -->
-                  <button class="btn btn-primary btn-fab btn-icon btn-round" (click)="onOpenModal(user,'edit')">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                  <!-- Delete User -->
-                  <button class="btn btn-danger btn-fab btn-icon btn-round" (click)="onOpenModal(user,'delete')">
-                    <i class="nc-icon nc-simple-remove"></i>
-                  </button>
+  <div  class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">
+            Lista Utenti
+            <button class="btn btn-primary btn-fab btn-icon btn-round" (click)="onOpenModal(null,'add')">
+              <i class="nc-icon nc-simple-add"></i>
+            </button>
+          </h4>
 
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Nome
+                </th>
+                <th>
+                  Cognome
+                </th>
+                <th>
+                  Numero Dotazioni Attuali
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td>{{user?.name}}</td>
+                  <td>{{user?.surname}}</td>
+                  <td>{{user?.numDotazioni}}</td>
+                  <td class="text-right">
+                    <!-- Edit Dotazioni  -->
+                    <button class="btn btn-primary btn-fab btn-round" (click)="onOpenModal(user,'dotazioni')">
+                      <i class="nc-icon nc-share-66"></i> DOTAZIONI
+                    </button>
+                    <!-- Edit User  -->
+                    <button class="btn btn-secondary btn-fab  btn-round" (click)="onOpenModal(user,'edit')">
+                      <i class="fa fa-pencil"></i> Modifica
+                    </button>
+                    <!-- Delete User -->
+                    <button class="btn btn-danger btn-fab btn-round" (click)="onOpenModal(user,'delete')">
+                      <i class="nc-icon nc-simple-remove"></i> Elimina
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Add User Modal -->
-  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalCenterTitle">Aggiungi Utente</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalCenterTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addUserModalCenterTitle">Aggiungi Utente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form #addUserForm="ngForm" (ngSubmit)="onAddUser(addUserForm)">
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label for="formName">Nome</label>
+                <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Inserire il nome..."
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="formSurname">Cognome</label>
+                <input type="text" ngModel name="surname" class="form-control" id="surname"
+                  placeholder="Inserire il cognome..." required>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="add-user-form-close" class="btn btn-secondary"
+                data-dismiss="modal">Annulla</button>
+              <button [disabled]="addUserForm.invalid" type="submit" class="btn btn-primary">Salva</button>
+            </div>
+          </form>
         </div>
-        <form #addUserForm="ngForm" (ngSubmit)="onAddUser(addUserForm)">
-          <div class="modal-body">
-
-            <div class="form-group">
-              <label for="formName">Nome</label>
-              <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Inserire il nome..."
-                required>
-            </div>
-            <div class="form-group">
-              <label for="formSurname">Cognome</label>
-              <input type="text" ngModel name="surname" class="form-control" id="surname"
-                placeholder="Inserire il cognome..." required>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="add-user-form-close" class="btn btn-secondary"
-              data-dismiss="modal">Annulla</button>
-            <button [disabled]="addUserForm.invalid" type="submit" class="btn btn-primary">Salva</button>
-          </div>
-        </form>
       </div>
+
+
     </div>
 
 
-  </div>
-
-
-  <!-- Edit User Modal -->
-  <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editUserModalLongTitle">Modifica Utente</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalCenterTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editUserModalLongTitle">Modifica Utente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form #editForm="ngForm">
+            <div class="modal-body">
+              <input type="hidden" ngModel="{{editUser?.id}}" name="id" class="form-control" id="id">
+              <div class="form-group">
+                <label for="formName">Nome</label>
+                <input type="text" ngModel="{{editUser?.name}}" name="name" class="form-control" id="name"
+                  placeholder="Inserire il nome..." required>
+              </div>
+              <div class="form-group">
+                <label for="formSurname">Cognome</label>
+                <input type="text" ngModel="{{editUser?.surname}}" name="surname" class="form-control" id="surname"
+                  placeholder="Inserire il cognome" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="" type="button" class="btn btn-secondary" data-dismiss="modal"
+                style="margin:0px 1px">Annulla</button>
+              <button (click)="onUpdateUser(editForm.value)" class="btn btn-primary" data-dismiss="modal"
+                style="margin:0px 1px">Salva</button>
+            </div>
+          </form>
         </div>
-        <form #editForm="ngForm">
+      </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteUserModalLabel">Elimina Utente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="modal-body">
-            <input type="hidden" ngModel="{{editUser?.id}}" name="id" class="form-control" id="id">
-            <div class="form-group">
-              <label for="formName">Nome</label>
-              <input type="text" ngModel="{{editUser?.name}}" name="name" class="form-control" id="name"
-                placeholder="Inserire il nome..." required>
-            </div>
-            <div class="form-group">
-              <label for="formSurname">Cognome</label>
-              <input type="text" ngModel="{{editUser?.surname}}" name="surname" class="form-control" id="surname"
-                placeholder="Inserire il cognome" required>
-            </div>
+            Sei sicuro di voler eliminare l'utente selezionato?
           </div>
           <div class="modal-footer">
-            <button id="" type="button" class="btn btn-secondary" data-dismiss="modal"
+            <button type="button" id="delete-user-close" class="btn btn-secondary" data-dismiss="modal"
               style="margin:0px 1px">Annulla</button>
-            <button (click)="onUpdateUser(editForm.value)" class="btn btn-primary" data-dismiss="modal"
-              style="margin:0px 1px">Salva</button>
+            <button (click)="onDeleteUser(deleteUser?.id)" class="btn btn-danger" data-dismiss="modal" style="margin:0px 1px">Si</button>
           </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Delete User Modal -->
-  <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteUserModalLabel">Elimina Utente</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Sei sicuro di voler eliminare l'utente selezionato?
-        </div>
-        <div class="modal-footer">
-          <button type="button" id="delete-user-close" class="btn btn-secondary" data-dismiss="modal"
-            style="margin:0px 1px">Annulla</button>
-          <button (click)="onDeleteUser(deleteUser?.id)" class="btn btn-danger" data-dismiss="modal" style="margin:0px 1px">Si</button>
         </div>
       </div>
     </div>
+
   </div>
 
-</div>
-
-<div *ngIf="users?.length == 0">
-  <div class="alert alert-warning" role="alert">
-    Nessun Utente
+  <div *ngIf="users?.length == 0">
+    <div class="alert alert-warning" role="alert">
+      Nessun Utente
+    </div>
   </div>
 </div>

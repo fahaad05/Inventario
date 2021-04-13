@@ -1,0 +1,233 @@
+<div id="garment-list">
+
+  <div class="row" id="main-container">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">
+            Lista Indumenti
+            <button class="btn btn-primary btn-fab btn-icon btn-round" (click)="onOpenModal(null,'add')">
+              <i class="nc-icon nc-simple-add"></i>
+            </button>
+          </h4>
+
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Nome
+                </th>
+                <th>
+                  Taglia
+                </th>
+                <th>
+                  In magazzino
+                </th>
+                <th>
+                  Assegnati
+                </th>
+                <th>
+                  Persi/Danneggiati
+                </th>
+                <!-- <th>
+                  Quantità obiettivo
+                </th> -->
+              </thead>
+              <tbody>
+                <tr *ngFor="let garment of garments">
+                  <td>{{garment?.name}}</td>
+                  <td>{{garment?.size}}</td>
+                  <td>{{garment?.quantAttuale}}</td>
+                  <td>{{garment?.quantAssegnati}}</td>
+                  <td>{{garment?.quantNd}}</td>
+                  <!-- <td>{{garment?.quantObiettivo}}</td> -->
+                  <td class="text-right">
+                    <!-- Edit Garment  -->
+                    <button class="btn btn-primary btn-fab btn-round" (click)="onOpenModal(garment,'dotazioni')">
+                      <i class="nc-icon nc-share-66"></i> IN DOTAZIONE A
+                    </button>
+                    <button class="btn btn-secondary btn-fab btn-round" (click)="onOpenModal(garment,'edit')">
+                      <i class="fa fa-pencil"></i> Modifica
+                    </button>
+                    <!-- Delete Garment -->
+                    <button class="btn btn-danger btn-fab btn-round" (click)="onOpenModal(garment,'delete')">
+                      <i class="nc-icon nc-simple-remove"></i> Elimina
+                    </button>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Garment Modal -->
+    <div class="modal fade" id="addGarmentModal" tabindex="-1" role="dialog"
+      aria-labelledby="addGarmentModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addGarmentModalCenterTitle">Aggiungi Indumento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form #addGarmentForm="ngForm" (ngSubmit)="onAddGarment(addGarmentForm)">
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label for="formName">Nome</label>
+                <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Inserire il nome..."
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="formSize">Taglia</label>
+                <input type="text" ngModel name="size" class="form-control" id="size"
+                  placeholder="Inserire la taglia..." required>
+              </div>
+              <div class="form-group">
+                <label for="formQuantAttuale">In magazzino</label>
+                <input type="text" ngModel name="quantAttuale" class="form-control" id="quantAttuale"
+                  placeholder="Inserire la quantità attuale..." required>
+              </div>
+              <div class="form-group">
+                <label for="formquantObiettivo">Quantità obiettivo</label>
+                <input type="text" ngModel name="quantObiettivo" class="form-control" id="quantObiettivo"
+                  placeholder="Inserire la quantità obiettivo..." required>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="add-garment-form-close" class="btn btn-secondary"
+                data-dismiss="modal">Annulla</button>
+              <button [disabled]="addGarmentForm.invalid" type="submit" class="btn btn-primary">Salva</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Edit Garment Modal -->
+    <div class="modal fade" id="editGarmentModal" tabindex="-1" role="dialog"
+      aria-labelledby="editGarmentModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editGarmentModalCenterTitle">Modifica Indumento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form #editForm="ngForm">
+            <div class="modal-body">
+              <input type="hidden" ngModel="{{editGarment?.id}}" name="id" class="form-control" id="id">
+              <div class="form-group">
+                <label for="formName">Nome</label>
+                <input type="text" ngModel="{{editGarment?.name}}" name="name" class="form-control" id="name"
+                  placeholder="Inserire il nome..." required>
+              </div>
+              <div class="form-group">
+                <label for="formSize">Taglia</label>
+                <input type="text" ngModel="{{editGarment?.size}}" name="size" class="form-control" id="size"
+                  placeholder="Inserire la taglia" required>
+              </div>
+              <div class="form-group">
+                <label for="formQuantAttuale">In Magazzino</label>
+                <input type="text" ngModel="{{editGarment?.quantAttuale}}" name="quantAttuale" class="form-control"
+                  id="quantAttuale" placeholder="Inserire la quantità attuale..." required>
+              </div>
+              <div class="form-group">
+                <label for="formquantObiettivo">Quantità obiettivo</label>
+                <input type="text" ngModel="{{editGarment?.quantObiettivo}}" name="quantObiettivo" class="form-control"
+                  id="quantObiettivo" placeholder="Inserire la quantità obiettivo" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="" type="button" class="btn btn-secondary" data-dismiss="modal"
+                style="margin:0px 1px">Annulla</button>
+              <button (click)="onUpdateGarment(editForm.value)" class="btn btn-primary" data-dismiss="modal"
+                style="margin:0px 1px">Salva</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Garment Modal -->
+    <div class="modal fade" id="deleteGarmentModal" tabindex="-1" role="dialog"
+      aria-labelledby="deleteGarmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteGarmentModalLabel">Elimina Indumento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Sei sicuro di voler eliminare l'indumento selezionato?
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="delete-garment-close" class="btn btn-secondary" data-dismiss="modal"
+              style="margin:0px 1px">Annulla</button>
+            <button (click)="onDeleteGarment(deleteGarment?.id)" class="btn btn-danger" data-dismiss="modal"
+              style="margin:0px 1px">Si</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Dotazioni Modal -->
+    <div class="modal fade" id="aviewMovementModal" tabindex="-1" role="dialog"
+      aria-labelledby="viewMovementModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewMovementModalCenterTitle">In dotazione a </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let movement of movements">
+                  <td>{{movement?.username}}</td>
+                  <td class="text-right">
+                    <!-- Riconsegna Garment  -->
+                    <button class="btn btn-primary btn-fab btn-round" (click)="onMovementOpenModal(movement,'riconsegna')">
+                      <i class="fa fa-pencil"></i> Riconsegna
+                    </button>
+                    <!-- Perso Garment  -->
+                    <button class="btn btn-warning btn-fab btn-round" (click)="onMovementOpenModal(movement,'danneggiato')">
+                      <i class="fa nc-simple-remove"></i> Danneggiato
+                    </button>
+                    <!-- Perso Garment -->
+                    <button class="btn btn-danger btn-fab btn-round" (click)="onMovementOpenModal(movement,'perso')">
+                      <i class="nc-icon nc-simple-remove"></i> Perso
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div *ngIf="garments?.length == 0">
+    <div class="alert alert-warning" role="alert">
+      Nessun Indumento
+    </div>
+  </div>
+</div>

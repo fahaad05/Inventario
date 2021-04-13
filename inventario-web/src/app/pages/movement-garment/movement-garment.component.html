@@ -1,0 +1,109 @@
+<div id="movement-garment">
+
+  <div class="row" id="main-container">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">
+            {{currentGarment?.name}}
+          </h4>
+          <h6>
+            Taglia: {{currentGarment?.size}}
+          </h6>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Volontario
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of usernames">
+                  <td>{{user?.name}}</td>
+
+                  <td class="text-right">
+                    <!-- Riconsegna Garment  -->
+                    <button class="btn btn-primary btn-fab btn-round" (click)="onMovementOpenModal(user,'riconsegna')">
+                      <i class="nc-icon nc-share-66"></i> Riconsegna
+                    </button>
+                    <!-- Danneggiato Garment  -->
+                    <button class="btn btn-warning btn-fab btn-round" (click)="onMovementOpenModal(user,'danneggiato')">
+                      <i class="fa fa-pencil"></i> Danneggiata
+                    </button>
+                    <!-- Perso Garment -->
+                    <button class="btn btn-danger btn-fab btn-round" (click)="onMovementOpenModal(user,'perso')">
+                      <i class="nc-icon nc-simple-remove"></i> Persa
+                    </button>
+                    <!-- Annulla Movement -->
+                    <button class="btn btn-secondary btn-fab btn-round" (click)="onMovementOpenModal(user,'annulla')">
+                      <i class="nc-icon nc-simple-remove"></i> Annulla
+                    </button>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Movement Modal -->
+    <div class="modal fade" id="editMovementModal" tabindex="-1" role="dialog"
+      aria-labelledby="editMovementModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editMovementModalCenterTitle">Conferma Operazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Sei sicuro di voler eseguire l'operazione selezionata?
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="edit-movement-close" class="btn btn-secondary" data-dismiss="modal"
+              style="margin:0px 1px">Annulla</button>
+            <button (click)="onEditMovement(editMovement?.id, editMovementStateSelected)" class="btn btn-danger"
+              data-dismiss="modal" style="margin:0px 1px">Si</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Garment Modal -->
+    <div class="modal fade" id="deleteMovementModal" tabindex="-1" role="dialog"
+      aria-labelledby="deleteMovementModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteMovementModalLabel">Elimina Movimento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Sei sicuro di voler eliminare il movimento selezionato?
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="delete-movement-close" class="btn btn-secondary" data-dismiss="modal"
+              style="margin:0px 1px">Annulla</button>
+            <button (click)="onDeleteMovement(deleteMovement?.id)" class="btn btn-danger" data-dismiss="modal"
+              style="margin:0px 1px">Si</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="usernames?.length == 0">
+    <div class="alert alert-warning" role="alert">
+      Nessun Movimento Registrato
+    </div>
+  </div>
+</div>

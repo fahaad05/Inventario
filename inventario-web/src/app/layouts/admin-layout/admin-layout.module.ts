@@ -13,6 +13,9 @@ import { NotificationsComponent }   from '../../pages/notifications/notification
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserListComponent } from 'app/pages/user/list/user-list.component';
+import { GarmentListComponent } from 'app/pages/garment/garment-list.component';
+import { MovementGarmentComponent } from 'app/pages/movement-garment/movement-garment.component';
+import { MovementUserComponent } from 'app/pages/movement-user/movement-user.component';
 
 @NgModule({
   imports: [
@@ -28,6 +31,9 @@ import { UserListComponent } from 'app/pages/user/list/user-list.component';
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,
+    GarmentListComponent,
+    MovementGarmentComponent,
+    MovementUserComponent
   ]
 })
 

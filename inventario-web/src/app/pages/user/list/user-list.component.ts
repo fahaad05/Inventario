@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from 'app/models/User';
 import { UserService } from 'app/services/user.service';
 
@@ -15,21 +16,16 @@ export class UserListComponent implements OnInit {
   editUser: User;
   deleteUser: User;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getUsers();
+    this.userService.users$.subscribe(
+      users => this.users = users);
+      this.getUsers();
   }
 
   public getUsers(): void {
-    this.userService.getUsers().subscribe(
-      (response: User[]) => {
-        this.users = response
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message)
-      }
-    );
+    this.users = this.userService.getUsers(this.users);
   }
 
   public onAddUser(addUserForm: NgForm): void {
@@ -79,12 +75,12 @@ export class UserListComponent implements OnInit {
         || user.surname.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
         results.push(user);
       }
-      this.users = results;
-      this.userService.setNewUsers(results);
+    }
 
-      if (results.length === 0 || !key) {
-        this.getUsers();
-      }
+    this.users = results;
+    this.userService.setNewUsers(results);
+    if (results.length === 0 || !key) {
+      this.getUsers();
     }
   }
 
@@ -106,6 +102,9 @@ export class UserListComponent implements OnInit {
     if (mode === 'delete') {
       this.deleteUser = user;
       button.setAttribute('data-target', '#deleteUserModal')
+    }
+    if (mode === 'dotazioni') {
+      this.router.navigate(['/movement-user', user.id]);
     }
     container.appendChild(button);
     button.click();

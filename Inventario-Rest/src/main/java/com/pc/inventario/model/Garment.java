@@ -14,12 +14,33 @@ public class Garment {
     private String size;
     private int quantAttuale;
     private int quantObiettivo;
+    private int quantAssegnati;
+    private int quantNd;
 
     public Garment(String name, String size, int quantAttuale, int quantObiettivo) {
         this.name = name;
         this.size = size;
         this.quantAttuale = quantAttuale;
         this.quantObiettivo = quantObiettivo;
+    }
+
+    public int getQuantAssegnati() {
+        return quantAssegnati;
+    }
+
+    public void setQuantAssegnati(int quantAssegnati) {
+        this.quantAssegnati = quantAssegnati;
+    }
+
+    public int getQuantNd() {
+        return quantNd;
+    }
+
+    public void setQuantNd(int quantNd) {
+        this.quantNd = quantNd;
+    }
+
+    public Garment() {
     }
 
     public int getQuantAttuale() {
