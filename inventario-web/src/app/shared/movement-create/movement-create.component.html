@@ -20,7 +20,7 @@
           <div class="modal-body">
 
             <div class="form-group">
-              <label> Nome </label>
+              <label> Volontario </label>
               <ng-select formControlName="name" [(items)]="users"
                 [(ngModel)]="selectedUserId" bindLabel="name" bindValue="id" placeholder="Seleziona un utente...">
 
@@ -56,6 +56,21 @@
                   {{item?.name}} - {{item?.size}}
                 </ng-template>
               </ng-select>
+            </div>
+
+            <hr>
+
+            <div class="form-group ">
+              <label> Data </label>
+              <div class="input-group mb-3">
+                <input placeholder="dd/mm/yyyy" class="form-control" formControlName="date"
+                       name="date" [(ngModel)]="model" ngbDatepicker #date="ngbDatepicker">
+
+                  <button class="btn btn-outline-secondary dateButton" (click)="date.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+
+              </div>
             </div>
 
             <!-- <p>createMovementForm value: {{ createMovementForm.value | json}}</p> -->

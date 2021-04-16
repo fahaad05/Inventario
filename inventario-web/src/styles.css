@@ -10,3 +10,15 @@
   border-radius: 8px 0 0 8px;
   bottom: 30px;
 }
+
+.date{
+  padding: 0!important;
+}
+
+.dateButton {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

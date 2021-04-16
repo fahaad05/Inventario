@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Garment } from 'app/models/Garment';
 import { Movement } from 'app/models/Movement';
 import { User } from 'app/models/User';
@@ -21,6 +22,7 @@ export class MovementCreateComponent implements OnInit {
   allGarments: Garment[] = [];
   selectedGarments: number[];
   selectedUserId: number;
+  model: NgbDateStruct;
 
   constructor(private fb: FormBuilder, private userService: UserService, private garmentService: GarmentService,
     private movementService: MovementService) { }
@@ -35,7 +37,8 @@ export class MovementCreateComponent implements OnInit {
 
     this.createMovementForm = this.fb.group({
       name: ['', Validators.required],
-      garmentsList: ['', Validators.required]
+      garmentsList: ['', Validators.required],
+      date: []
     });
   }
 

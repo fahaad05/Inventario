@@ -18,6 +18,8 @@ import { MovementCreateComponent } from './shared/movement-create/movement-creat
 import { MovementModule } from "./shared/movement-create/movement.module";
 import { MovementGarmentComponent } from './pages/movement-garment/movement-garment.component';
 import { MovementUserComponent } from './pages/movement-user/movement-user.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 
 @NgModule({
@@ -36,7 +38,8 @@ import { MovementUserComponent } from './pages/movement-user/movement-user.compo
     FooterModule,
     FixedPluginModule,
     MovementModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
