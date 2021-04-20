@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,6 +15,7 @@ public class Movement {
     private Long id;
     private Long userId;
     private Long garmentId;
+    private LocalDate movementDate;
 
     private MovementType movementType;
 
@@ -22,6 +25,14 @@ public class Movement {
     }
 
     public Movement() {
+    }
+
+    public LocalDate getMovementDate() {
+        return movementDate;
+    }
+
+    public void setMovementDate(LocalDate movementDate) {
+        this.movementDate = movementDate;
     }
 
     public MovementType getMovementType() {

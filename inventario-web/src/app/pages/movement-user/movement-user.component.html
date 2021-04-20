@@ -66,15 +66,15 @@
       <div class="card card-plain">
         <div class="card-header">
           <!-- <h5 class="card-title"> Dotazioni Non Più Disponibili </h5> -->
-          <p>Dotazioni Non Più Disponibili</p>
+          <p>Lista Dotazioni Non Più Disponibili</p>
         </div>
         <div class="card-body">
-          <div *ngIf="garmentsDetailList?.length == 0">
+          <div *ngIf="oldMovements?.length == 0">
             <div class="alert alert-warning" role="alert">
               Nessun Movimento Registrato
             </div>
           </div>
-          <div class="table-responsive" *ngIf="garmentsDetailList?.length != 0">
+          <div class="table-responsive" *ngIf="oldMovements?.length != 0">
             <table class="table">
               <thead class=" text-primary">
                 <th>
@@ -86,12 +86,16 @@
                 <th>
                   Stato
                 </th>
+                <th>
+                  Registrato il
+                </th>
               </thead>
               <tbody>
                 <tr *ngFor="let garment of oldMovements">
                   <td>{{garment?.name}}</td>
                   <td>{{garment?.size}}</td>
                   <td>{{garment?.state}}</td>
+                  <td>{{garment?.date}}</td>
                 </tr>
               </tbody>
             </table>
@@ -112,13 +116,25 @@
             </button>
           </div>
           <div class="modal-body">
-            Sei sicuro di voler eseguire l'operazione selezionata?
+            <div class="form-group ">
+              <label> Evento registrato il </label>
+
+              <div class="input-group mb-3">
+                <input placeholder="dd/mm/yyyy" class="form-control"
+                       name="movDate" [(ngModel)]="movDate" ngbDatepicker #d="ngbDatepicker">
+
+                  <button class="btn btn-outline-secondary dateButton" (click)="d.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" id="edit-movement-close" class="btn btn-secondary" data-dismiss="modal"
-              style="margin:0px 1px">Annulla</button>
+            style="margin:0px 1px">Annulla</button>
             <button (click)="onEditMovement(editMovement?.id, editMovementStateSelected)" class="btn btn-danger"
-              data-dismiss="modal" style="margin:0px 1px">Si</button>
+            data-dismiss="modal" style="margin:0px 1px">Salva</button>
           </div>
         </div>
       </div>

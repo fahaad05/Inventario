@@ -3,6 +3,7 @@ import { User as User } from 'app/models/User';
 import { environment } from 'environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http"
+import { GarmentService } from './garment.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UserService {
   private usersSource = new Subject<User[]>();
   users$ = this.usersSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private garmentService: GarmentService) {}
 
   public getUsersHttp(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiServerUrl}/user/all`);
@@ -23,11 +24,11 @@ export class UserService {
       (response: User[]) => {
         usersList = response;
         this.setNewUsers(response);
-        console.log(usersList);
         return usersList;
       },
       (error: HttpErrorResponse) => {
-        alert(error.message)
+        console.log(error.message);
+        this.garmentService.showNotification('top','right',4);
       }
     );
     return null;

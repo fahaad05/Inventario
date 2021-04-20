@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Garment } from 'app/models/Garment';
 import { Movement } from 'app/models/Movement';
 import { MovementType } from 'app/models/MovementType';
@@ -9,11 +9,11 @@ import { User } from 'app/models/User';
 import { GarmentService } from 'app/services/garment.service';
 import { MovementService } from 'app/services/movement.service';
 import { UserService } from 'app/services/user.service';
+import { NgbCalendar, NgbDate, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'movement-garment',
   templateUrl: './movement-garment.component.html',
-  styleUrls: ['./movement-garment.component.css']
 })
 export class MovementGarmentComponent implements OnInit {
 
@@ -25,9 +25,10 @@ export class MovementGarmentComponent implements OnInit {
   currentGarment: Garment;
   usernames: MovementDetail[] = [];
   editMovementStateSelected: MovementType = MovementType.ASSEGNATO;
+  movDate: NgbDate;
 
   constructor(private garmentService: GarmentService, private movementService: MovementService, private userService: UserService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private ngbCalendar: NgbCalendar, private dateAdapter: NgbDateAdapter<string>) { }
 
   ngOnInit(): void {
 
@@ -64,48 +65,50 @@ export class MovementGarmentComponent implements OnInit {
           })
         },
         (error: HttpErrorResponse) => {
-          if(error.status == 404)
-          //TODO Notification
-          console.log("No movement");
+          console.log(error.message);
         }
       );
     }
-    else {
-      console.log("No item selected!");
-    }
-    // this.usernames.forEach(x => console.log(x));
   }
 
   public onEditMovement(movementId: number, stateId: number): void {
-    // console.log(movementUserDetail);
-    console.log("State id:" + stateId);
+
+    let date = new Date(
+      this.movDate.year,
+      this.movDate.month-1,
+      this.movDate.day,
+    );
     let movement = this.movementList.filter(x => x.id == movementId)[0];
-    console.log("Movement: "+movement);
-    this.movementService.updateMovementStatus(movement, stateId).subscribe(
+    movement.movementDate = date;
+
+    this.movementService.updateMovementStatus(movement, stateId, date).subscribe(
       (response: Movement) => {
         this.getMovements();
-        console.log(response);
+        this.garmentService.showNotification('top','right',2);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        this.garmentService.showNotification('top','right',4);
       }
     );
   }
 
   public onDeleteMovement(movementId: number): void {
-    console.log(movementId);
     this.movementService.deleteMovement(movementId).subscribe(
       (response: void) => {
-        console.log(response);
         this.getMovements();
+        this.garmentService.showNotification('top','right',2);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        this.garmentService.showNotification('top','right',4);
       }
     );
   }
 
   public onMovementOpenModal(movementDetail: MovementDetail, mode: string): void {
+    this.selectToday();
+
     const container = document.getElementById("main-container");
     const button = document.createElement('button');
     button.type = 'button';
@@ -142,5 +145,18 @@ export class MovementGarmentComponent implements OnInit {
 
   public getUsers(): void {
     this.users = this.userService.getUsers(this.users);
+  }
+
+  public selectToday(): void {
+    const today = new Date();
+    this.movDate = new NgbDate(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      today.getDate(),
+    );
+  }
+
+  get today() {
+    return this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
   }
 }

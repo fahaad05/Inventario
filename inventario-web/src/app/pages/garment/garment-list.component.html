@@ -37,7 +37,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let garment of garments">
-                  <td>{{garment?.name}}</td>
+                  <td>{{garment?.name}} <i *ngIf="garment?.quantAttuale<garment?.quantObiettivo" class="fa fa-exclamation-triangle iconDanger" aria-hidden="true"></i></td>
                   <td>{{garment?.size}}</td>
                   <td>{{garment?.quantAttuale}}</td>
                   <td>{{garment?.quantAssegnati}}</td>

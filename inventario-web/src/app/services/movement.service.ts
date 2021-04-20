@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable, Subject } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http"
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http"
 import { Movement } from 'app/models/Movement';
 import { User } from 'app/models/User';
 import { Garment } from 'app/models/Garment';
@@ -20,8 +20,10 @@ export class MovementService {
 
   constructor(private http: HttpClient) {}
 
-  public addMovement(movement: Movement): Observable<Movement> {
-    return this.http.post<Movement>(`${this.apiServerUrl}/movement/add`, movement);
+  public addMovement(movement: Movement,date: Date): Observable<Movement> {
+    // Param
+    let params = new HttpParams().set('date', date.toDateString());
+    return this.http.post<Movement>(`${this.apiServerUrl}/movement/add`, movement, {params: params});
   }
 
   public getMovements(): Observable<Movement[]> {
@@ -40,8 +42,9 @@ export class MovementService {
     return this.http.get<Movement[]>(`${this.apiServerUrl}/movement/find/user/${userId}/notAssigned`);
   }
 
-  public updateMovementStatus(movement: Movement, statusId: number): Observable<Movement> {
-    return this.http.put<Movement>(`${this.apiServerUrl}/movement/update/status/${statusId}`, movement);
+  public updateMovementStatus(movement: Movement, statusId: number, date: Date): Observable<Movement> {
+    let params = new HttpParams().set('date', date.toDateString());
+    return this.http.put<Movement>(`${this.apiServerUrl}/movement/update/status/${statusId}`, movement, {params: params});
   }
 
   public deleteMovement(movementId: number): Observable<void> {
@@ -50,7 +53,6 @@ export class MovementService {
 
   setCurrentGarmentMovements(garment: Garment) {
     this.garmentMovementsSource.next( garment );
-    console.log(garment);
   }
 
   setCurrentUserMovements(user: User) {

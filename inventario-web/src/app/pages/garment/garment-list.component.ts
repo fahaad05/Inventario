@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Garment } from 'app/models/Garment';
 import { Movement } from 'app/models/Movement';
 import { MovementDetail } from 'app/models/MovementDetail';
@@ -12,7 +12,6 @@ import { UserService } from 'app/services/user.service';
 @Component({
   selector: 'garment-list',
   templateUrl: './garment-list.component.html',
-  styleUrls: ['./garment-list.component.css'],
   moduleId: module.id
 })
 export class GarmentListComponent implements OnInit {
@@ -50,13 +49,14 @@ export class GarmentListComponent implements OnInit {
     document.getElementById("add-garment-form-close").click();
     this.garmentService.addGarment(addGarmentForm.value).subscribe(
       (response: Garment) => {
-        console.log(response);
         this.getGarments();
+        this.garmentService.showNotification('top','right',2);
         addGarmentForm.reset();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
         addGarmentForm.reset();
+        this.garmentService.showNotification('top','right',4);
       }
     );
   }
@@ -64,45 +64,30 @@ export class GarmentListComponent implements OnInit {
   public onUpdateGarment(garment: Garment): void {
     this.garmentService.updateGarment(garment).subscribe(
       (response: Garment) => {
-        console.log(response);
         this.getGarments();
+        this.garmentService.showNotification('top','right',2);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
   }
 
   public onDeleteGarment(garmentId: number): void {
-    console.log(garmentId);
     this.garmentService.deleteGarment(garmentId).subscribe(
       (response: void) => {
-        console.log(response);
         this.getGarments();
+        this.garmentService.showNotification('top','right',2);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
   }
 
-  // public searchGarment(key: string): void {
-  //   const results: Garment[] = [];
-  //   for (const garment of this.garments) {
-  //     if (garment.name.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
-  //       results.push(garment);
-  //     }
-  //   }
-
-  //   this.garments = results;
-  //   this.garmentService.setNewGarments(results);
-  //   if (results.length === 0 || !key) {
-  //     this.getGarments();
-  //   }
-  // }
-
 
   public onOpenModal(garment: Garment, mode: string): void {
+
     const container = document.getElementById("main-container");
     const button = document.createElement('button');
     button.type = 'button';
@@ -117,7 +102,7 @@ export class GarmentListComponent implements OnInit {
       button.setAttribute('data-target', '#editGarmentModal')
     }
     if (mode === 'dotazioni') {
-      this.router.navigate(['/movement-garment', garment.id]);
+      this.router.navigate(['garment/movement-garment', garment.id]);
     }
     if (mode === 'delete') {
       this.deleteGarment = garment;

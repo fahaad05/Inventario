@@ -15,9 +15,17 @@
   padding: 0!important;
 }
 
+.dateDiv {
+  padding-left: 0!important;
+}
+
 .dateButton {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.iconDanger {
+  color: red!important;
 }
 
 html, body { height: 100%; }

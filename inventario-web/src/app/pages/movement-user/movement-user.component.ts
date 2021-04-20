@@ -10,11 +10,11 @@ import { MovementService } from 'app/services/movement.service';
 import { UserService } from 'app/services/user.service';
 import { MovementUserDetail } from 'app/models/MovementUserDetail';
 import { OldMovementDetail } from 'app/models/OldMovementDetail';
+import { NgbCalendar, NgbDate, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-movement-user',
   templateUrl: './movement-user.component.html',
-  styleUrls: ['./movement-user.component.css']
 })
 export class MovementUserComponent implements OnInit {
 
@@ -27,9 +27,10 @@ export class MovementUserComponent implements OnInit {
   garmentsDetailList: MovementUserDetail[] = [];
   oldMovements: OldMovementDetail[] = [];
   editMovementStateSelected: MovementType = MovementType.ASSEGNATO;
+  movDate: NgbDate;
 
   constructor(private garmentService: GarmentService, private movementService: MovementService, private userService: UserService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private ngbCalendar: NgbCalendar, private dateAdapter: NgbDateAdapter<string>) { }
 
   ngOnInit(): void {
 
@@ -44,12 +45,13 @@ export class MovementUserComponent implements OnInit {
 
     this.userService.users$.subscribe(
       users => this.users = users);
-    // this.getUsers();
 
     this.garmentService.garments$.subscribe(
       garments => this.garments = garments);
-      this.getGarments();
+    this.getGarments();
   }
+
+
 
   public getMovements(): void {
     if (this.currentUser) {
@@ -68,74 +70,80 @@ export class MovementUserComponent implements OnInit {
           })
         },
         (error: HttpErrorResponse) => {
-          if(error.status == 404)
-          //TODO Notification
-          console.log("No movement found");
+          console.log(error.message);
+          this.garmentService.showNotification('top', 'right', 4);
         }
       );
     }
-    else {
-      console.log("No item selected!");
-    }
-    // this.usernames.forEach(x => console.log(x));
   }
 
-  public getOldMovements(): void{
+
+  public getOldMovements(): void {
     if (this.currentUser) {
+      this.oldMovements = [];
       this.movementService.getMovementsByUserIdWithTypeNotAssigned(this.currentUser.id).subscribe(
         (response: Movement[]) => {
           response.forEach(m => {
             let currGarment = this.garments.filter(x => x.id == m.garmentId)[0];
+
             let u: OldMovementDetail = {
               name: currGarment.name,
               size: currGarment.size,
-              state: m.movementType
+              state: m.movementType,
+              date: this.dateFromApiFormatToClient(m.movementDate),
             }
             this.oldMovements.push(u);
-          })
+          });
         },
         (error: HttpErrorResponse) => {
-          if(error.status == 404)
-          //TODO Notification
-          console.log("No movement found");
+          console.log(error.message);
         }
       );
     }
-    else {
-      console.log("No item selected!");
-    }
   }
 
+
   public onEditMovement(movementId: number, stateId: number): void {
-    // console.log(movementUserDetail);
-    console.log("State id:" + stateId);
+
+    let date = new Date(
+      this.movDate.year,
+      this.movDate.month - 1,
+      this.movDate.day,
+    );
+
     let movement = this.movementList.filter(x => x.id == movementId)[0];
-    console.log("Movement: "+movement);
-    this.movementService.updateMovementStatus(movement, stateId).subscribe(
+
+    movement.movementDate = date;
+    this.movementService.updateMovementStatus(movement, stateId, date).subscribe(
       (response: Movement) => {
         this.getMovements();
-        console.log(response);
+        this.getOldMovements();
+        this.garmentService.showNotification('top', 'right', 2);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        this.garmentService.showNotification('top', 'right', 4);
       }
     );
   }
 
   public onDeleteMovement(movementId: number): void {
-    console.log(movementId);
     this.movementService.deleteMovement(movementId).subscribe(
       (response: void) => {
-        console.log(response);
         this.getMovements();
+        this.getOldMovements();
+        this.garmentService.showNotification('top', 'right', 2);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        this.garmentService.showNotification('top', 'right', 4);
       }
     );
   }
 
   public onMovementOpenModal(movementDetail: MovementUserDetail, mode: string): void {
+    this.selectToday();
+
     const container = document.getElementById("main-container");
     const button = document.createElement('button');
     button.type = 'button';
@@ -172,5 +180,38 @@ export class MovementUserComponent implements OnInit {
 
   public getUsers(): void {
     this.users = this.userService.getUsers(this.users);
+  }
+
+
+  private dateVisualize(date: NgbDate): string {
+    return date.day + '/' + date.month + '/' + date.year;
+  }
+
+  private dateFromApiFormatToClient(date: Date): string {
+    let newDate = null;
+    if (date) {
+      let tmp = new Date(date);
+
+      newDate = new NgbDate(
+        tmp.getFullYear(),
+        tmp.getMonth() + 1,
+        tmp.getDate());
+      return this.dateVisualize(newDate);
+    }
+    return '';
+  }
+
+
+  public selectToday(): void {
+    const today = new Date();
+    this.movDate = new NgbDate(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      today.getDate(),
+    );
+  }
+
+  get today() {
+    return this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
   }
 }

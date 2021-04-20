@@ -60,16 +60,18 @@
 
             <hr>
 
-            <div class="form-group ">
-              <label> Data </label>
-              <div class="input-group mb-3">
-                <input placeholder="dd/mm/yyyy" class="form-control" formControlName="date"
-                       name="date" [(ngModel)]="model" ngbDatepicker #date="ngbDatepicker">
+            <div class="col-4 dateDiv">
+              <div class="form-group ">
+                <label> Data </label>
+                <div class="input-group mb-3">
+                  <input placeholder="dd/mm/yyyy" class="form-control" formControlName="date"
+                         name="date" [(ngModel)]="movDate" ngbDatepicker #d="ngbDatepicker">
 
-                  <button class="btn btn-outline-secondary dateButton" (click)="date.toggle()" type="button">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </button>
+                    <button class="btn btn-outline-secondary dateButton" (click)="d.toggle()" type="button">
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
 
+                </div>
               </div>
             </div>
 

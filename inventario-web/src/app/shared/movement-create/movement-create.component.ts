@@ -1,13 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Garment } from 'app/models/Garment';
 import { Movement } from 'app/models/Movement';
 import { User } from 'app/models/User';
+import { DatepickerService } from 'app/services/datepicker.service';
 import { GarmentService } from 'app/services/garment.service';
 import { MovementService } from 'app/services/movement.service';
 import { UserService } from 'app/services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'movement-create',
@@ -22,10 +24,10 @@ export class MovementCreateComponent implements OnInit {
   allGarments: Garment[] = [];
   selectedGarments: number[];
   selectedUserId: number;
-  model: NgbDateStruct;
+  movDate: NgbDate;
 
   constructor(private fb: FormBuilder, private userService: UserService, private garmentService: GarmentService,
-    private movementService: MovementService) { }
+    private movementService: MovementService, private ngbCalendar: NgbCalendar, private dateAdapter: NgbDateAdapter<string>) { }
 
   ngOnInit(): void {
 
@@ -38,21 +40,28 @@ export class MovementCreateComponent implements OnInit {
     this.createMovementForm = this.fb.group({
       name: ['', Validators.required],
       garmentsList: ['', Validators.required],
-      date: []
+      date: ['']
     });
   }
 
   onSubmit() {
     document.getElementById("add-movement-form-close").click();
 
+    let date = new Date(
+      this.movDate.year,
+      this.movDate.month-1,
+      this.movDate.day,
+    );
+
     this.selectedGarments.forEach(i => {
       let movement: Movement = {
         userId: this.selectedUserId,
-        garmentId: i
+        garmentId: i,
+        movementDate: date
       };
-      this.movementService.addMovement(movement).subscribe(
+
+      this.movementService.addMovement(movement, date).subscribe(
         (response: Movement) => {
-          console.log(response);
         },
         (error: HttpErrorResponse) => {
           console.warn(error.message);
@@ -73,6 +82,13 @@ export class MovementCreateComponent implements OnInit {
 
     this.getAvailableGarments();
     this.getUsers();
+
+    const today = new Date();
+    this.movDate = new NgbDate(
+      today.getFullYear(),
+      today.getMonth()+1,
+      today.getDate(),
+    );
 
     const container = document.getElementById("main-container");
     const button = document.createElement('button');
@@ -103,6 +119,10 @@ export class MovementCreateComponent implements OnInit {
 
   public getUsers(): void {
     this.users = this.userService.getUsers(this.users);
+  }
+
+  get today() {
+    return this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
   }
 
 }

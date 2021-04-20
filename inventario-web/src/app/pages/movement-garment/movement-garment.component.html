@@ -5,11 +5,12 @@
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">
-            {{currentGarment?.name}}
+          {{currentGarment?.name}} | taglia: {{currentGarment?.size}}
           </h4>
-          <h6>
-            Taglia: {{currentGarment?.size}}
-          </h6>
+          <hr>
+          <h5>
+            In dotazione a:
+          </h5>
         </div>
 
         <div class="card-body">
@@ -63,7 +64,19 @@
             </button>
           </div>
           <div class="modal-body">
-            Sei sicuro di voler eseguire l'operazione selezionata?
+            <div class="form-group ">
+              <label> Evento registrato il </label>
+
+              <div class="input-group mb-3">
+                <input placeholder="dd/mm/yyyy" class="form-control"
+                       name="movDate" [(ngModel)]="movDate" ngbDatepicker #d="ngbDatepicker">
+
+                  <button class="btn btn-outline-secondary dateButton" (click)="d.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" id="edit-movement-close" class="btn btn-secondary" data-dismiss="modal"

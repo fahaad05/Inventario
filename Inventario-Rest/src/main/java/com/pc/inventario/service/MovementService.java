@@ -1,13 +1,18 @@
 package com.pc.inventario.service;
 
+import com.pc.inventario.controller.MovementController;
 import com.pc.inventario.exception.MovementNotFoundException;
 import com.pc.inventario.model.Movement;
 import com.pc.inventario.model.MovementType;
 import com.pc.inventario.repositories.MovementRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -21,6 +26,9 @@ public class MovementService {
     @Autowired
     private final UserService userService;
 
+    private static Logger logger = (Logger) LoggerFactory.getLogger(MovementService.class);
+
+
     @Autowired
     public MovementService(MovementRepository movementRepository, GarmentService garmentService, UserService userService) {
         this.movementRepository = movementRepository;
@@ -31,6 +39,7 @@ public class MovementService {
     public Movement addMovement(Movement movement) {
         //Modifico la quantità attuale dell'indumento selezionato
         movement.setMovementType(MovementType.ASSEGNAZIONE);
+
         garmentService.updateGarmentQuant(movement.getGarmentId(), 0);
         userService.updateNumDotazioniPlus(movement.getUserId());
         return movementRepository.save(movement);
@@ -75,21 +84,24 @@ public class MovementService {
     }
 
     public List<Movement> findAllMovementsByGarmentIdWithTypeAssigned(Long garmentId) {
-        return movementRepository.findMovementByGarmentId(garmentId)
-                .filter(movements -> movements.removeIf(m -> m.getMovementType() != MovementType.ASSEGNAZIONE))
+        List<Movement> movementList = movementRepository.findMovementByGarmentId(garmentId)
                 .orElse(null);
+        movementList.removeIf(m -> m.getMovementType() != MovementType.ASSEGNAZIONE);
+        return movementList;
     }
 
     public List<Movement> findAllMovementsByUserIdWithTypeAssigned(Long userId) {
-        return movementRepository.findMovementByUserId(userId)
-                .filter(movements -> movements.removeIf(m -> m.getMovementType() != MovementType.ASSEGNAZIONE))
+        List<Movement> movementList = movementRepository.findMovementByUserId(userId)
                 .orElse(null);
+        movementList.removeIf(m -> m.getMovementType() != MovementType.ASSEGNAZIONE);
+        return movementList;
     }
 
     public List<Movement> findAllMovementsByUserIdWithTypeNotAssigned(Long userId) {
-        return movementRepository.findMovementByUserId(userId)
-                .filter(movements -> movements.removeIf(m -> m.getMovementType() == MovementType.ASSEGNAZIONE))
-                .orElse(null);
+        List<Movement> movementList = movementRepository.findMovementByUserId(userId).orElse(null);
+        movementList.removeIf(m -> m.getMovementType() == MovementType.ASSEGNAZIONE);
+        return movementList;
+
     }
 
 

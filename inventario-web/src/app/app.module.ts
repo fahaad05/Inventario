@@ -20,12 +20,14 @@ import { MovementGarmentComponent } from './pages/movement-garment/movement-garm
 import { MovementUserComponent } from './pages/movement-user/movement-user.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserAnimationsModule,

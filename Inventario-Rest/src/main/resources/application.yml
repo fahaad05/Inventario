@@ -5,6 +5,9 @@ logging:
 
 #MYSQL CONFIGURATION
 spring:
+#  mvc:
+#    format:
+#      date: dd-MM-yyyy
   datasource:
     url: jdbc:mysql://localhost:3306/inventariopc
     username: root

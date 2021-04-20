@@ -32,7 +32,6 @@ export class UserListComponent implements OnInit {
     document.getElementById("add-user-form-close").click();
     this.userService.addUser(addUserForm.value).subscribe(
       (response: User) => {
-        console.log(response);
         this.getUsers();
         addUserForm.reset();
       },
@@ -46,7 +45,6 @@ export class UserListComponent implements OnInit {
   public onUpdateUser(user: User): void {
     this.userService.updateUser(user).subscribe(
       (response: User) => {
-        console.log(response);
         this.getUsers();
       },
       (error: HttpErrorResponse) => {
@@ -56,10 +54,8 @@ export class UserListComponent implements OnInit {
   }
 
   public onDeleteUser(userId: number): void {
-    console.log(userId);
     this.userService.deleteUser(userId).subscribe(
       (response: void) => {
-        console.log(response);
         this.getUsers();
       },
       (error: HttpErrorResponse) => {
@@ -104,7 +100,7 @@ export class UserListComponent implements OnInit {
       button.setAttribute('data-target', '#deleteUserModal')
     }
     if (mode === 'dotazioni') {
-      this.router.navigate(['/movement-user', user.id]);
+      this.router.navigate(['user/movement-user', user.id]);
     }
     container.appendChild(button);
     button.click();
